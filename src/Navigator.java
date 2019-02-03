@@ -1,3 +1,4 @@
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Scanner;
 import com.google.gson.Gson;
@@ -123,6 +124,10 @@ public class Navigator {
      * @param roomName
      */
     public World.Room updateLocation(String roomName) {
+        if (roomName == null) {
+            return null;
+        }
+
         World.Room roomToMove = rooms.stream().filter(room -> roomName.equalsIgnoreCase(room.getName())).findAny().
                 orElse(null);
 

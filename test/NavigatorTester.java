@@ -3,13 +3,17 @@ import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NavigatorTester {
 
@@ -74,7 +78,9 @@ public class NavigatorTester {
         assertEquals("SiebelEntry", sRooms.get(0).getDirections().get(0).getRoom());
     }
 
-    //============Helper Method TESTS============
+    //=====================Helper Method TESTS==================
+
+    //============LOAD URL METHOD TESTS==========
     @Test
     public void checkValidURL() {
         try {
@@ -93,21 +99,59 @@ public class NavigatorTester {
         }
     }
 
-    @Test (expected = RuntimeException.class)
-    public void checkInvalidURL() throws Exception {
-        assertEquals(true, tGps.loadURL("lmao"));
+    @Test
+    public void checkLoadNull() {
+        try {
+            tGps.loadURL(null);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
+    @Test
+    public void checkInvalidURL() {
+        try {
+            tGps.loadURL("invalid url");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //============UPDATE LOCATION METHOD TESTS============
     @Test
     public void moveToSiebel112() {
         assertEquals(sRooms.get(4), tGps.updateLocation("Siebel1112"));
     }
 
-    @Test
-    public void checkIfAtBeginning() {
-        assertEquals("MatthewsStreet", tGps.getCurrentRoom().getName());
+    public void moveToNonexistentRoom() {
+        assertEquals(null, tGps.updateLocation("Chuck E. Cheese's - Where a Kid Can Be a Kid"));
     }
 
+    @Test
+    public void moveToNull() {
+        assertEquals(null, tGps.updateLocation(null));
+    }
+
+    //============GET CURRENT ROOM METHOD TESTS==========
+    @Test
+    public void checkIfAtBeginning() {
+        assertEquals(siebel.getStartingRoom(), tGps.getCurrentRoom().getName());
+    }
+
+    @Test
+    public void checkIfAtSiebelEastHallway() {
+        tGps.updateLocation("SiebelEastHallway");
+        assertEquals(sRooms.get(5).getName(), tGps.getCurrentRoom().getName());
+    }
+
+    @Test
+    public void checkIfAtEnd() {
+        tGps.updateLocation("Siebel1314");
+        assertEquals(siebel.getEndingRoom(), tGps.getCurrentRoom().getName());
+    }
+
+
+    //============CHECK IF AT END METHOD TESTS============
     @Test
     public void moveToEndAndCheck() {
         tGps.updateLocation("Siebel1314");
@@ -120,10 +164,43 @@ public class NavigatorTester {
         assertEquals(false, tGps.checkIfAtEnd());
     }
 
+    //============PRINT DIRECTIONS METHOD TESTS===========
     @Test
     public void checkListOfDirections() {
         List<World.Room.Direction> sEntryDirections = sRooms.get(1).getDirections();
         tGps.updateLocation("SiebelEntry");
         assertEquals(sEntryDirections, tGps.printDirections());
+    }
+
+    //============COMMAND CHECKER METHOD TESTS==============
+    @Test
+    public void checkValidCommand() {
+        assertEquals("fish.", tGps.commandChecker("gO fish."));
+    }
+
+    @Test
+    public void checkValidCommandThreeWord() {
+        assertEquals("salmon fish.", tGps.commandChecker("Go salmon fish."));
+    }
+
+    @Test
+    public void checkInvalidCommand() {
+        assertEquals(null, tGps.commandChecker(": - ) : - ) : - )"));
+    }
+
+    @Test
+    public void checkValidCommandAndDirection() {
+        assertEquals("EasT", tGps.commandChecker("GO EasT    "));
+    }
+
+    //===========CHECK IF VALID DIR METHOD TESTS===============
+    @Test
+    public void checkInvalidDirectionTwoWord() {
+        assertEquals(null, tGps.checkIfValidDirection("EastNorth"));
+    }
+
+    @Test
+    public void checkValidDirection() {
+        assertEquals(sRooms.get(0).getDirections().get(0), tGps.checkIfValidDirection("EasT"));
     }
 }
