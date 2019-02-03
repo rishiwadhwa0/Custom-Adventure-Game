@@ -53,14 +53,18 @@ public class Navigator {
             command = scanner.nextLine();
             direction = commandChecker(command);
             if (direction != null) {
+                //i.e. it was a valid command
                 World.Room.Direction dirInList = checkIfValidDirection(direction);
                 if (dirInList != null) {
+                    //i.e. it was a feasible direction
                     updateLocation(dirInList.getRoom());
                     break;
                 } else {
+                    //i.e. it was an infeasible direction
                     System.out.println("I can't go in the direction of " + direction);
                 }
             } else {
+                //i.e. it was an invalid command
                 System.out.println("I don't understand " + command);
             }
         }
