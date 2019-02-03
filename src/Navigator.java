@@ -34,9 +34,14 @@ public class Navigator {
     public void startNavigator() {
         System.out.println("Welcome to NAVIAGATOR");
         setUpWorld();
+        boolean firstTime = true;
         while (!checkIfAtEnd()) {
             printCurrentLocation();
             printDirections();
+            if (firstTime) {
+                System.out.println("You can let me know where you want to go to by sending the command 'go compass_direction'.");
+                firstTime = false;
+            }
             requestUserForNextMove();
         }
     }
@@ -45,7 +50,6 @@ public class Navigator {
         String command = "";
         String direction = "";
         while (true) {
-            System.out.println("You can let me know where you want to go to by sending the command 'go compass_direction'.");
             command = scanner.nextLine();
             direction = commandChecker(command);
             if (direction != null) {
@@ -59,8 +63,6 @@ public class Navigator {
             } else {
                 System.out.println("I don't understand " + command);
             }
-            System.out.println("You can let me know where you want to go to by" +
-                    " sending the command 'go compass_direction'.");
         }
     }
 
@@ -69,8 +71,12 @@ public class Navigator {
             System.exit(0);
         }
         String [] commandWords = command.split(" ");
-        if (commandWords.length == 2 && commandWords[0].equalsIgnoreCase("go")) {
-            return commandWords[1];
+        if (commandWords.length > 1 && commandWords[0].equalsIgnoreCase("go")) {
+            String direction = "";
+            for (int i = 1; i < commandWords.length; i++) {
+                direction = direction + commandWords[i] + " ";
+            }
+            return direction.trim();
         } else {
             return null;
         }
