@@ -34,18 +34,77 @@ public class Navigator {
     public void startNavigator() {
         System.out.println("Welcome to NAVIAGATOR");
         setUpWorld();
-        printCurrentLocation();
-        checkIfAtEnd();
+        while (!checkIfAtEnd()) {
+            printCurrentLocation();
+            printDirections();
+            requestUserForNextMove();
+        }
+    }
+
+    public void requestUserForNextMove() {
+        String command = "";
+        String direction = "";
+        while (true) {
+            System.out.println("You can let me know where you want to go to by sending the command 'go compass_direction'.");
+            command = scanner.nextLine();
+            direction = commandChecker(command);
+            if (direction != null) {
+                World.Room.Direction dirInList = checkIfValidDirection(direction);
+                if (dirInList != null) {
+                    updateLocation(dirInList.getRoom());
+                    break;
+                } else {
+                    System.out.println("I can't go in the direction of " + direction);
+                }
+            } else {
+                System.out.println("I don't understand " + command);
+            }
+            System.out.println("You can let me know where you want to go to by" +
+                    " sending the command 'go compass_direction'.");
+        }
+    }
+
+    public String commandChecker(String command) {
+        if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("exit")) {
+            System.exit(0);
+        }
+        String [] commandWords = command.split(" ");
+        if (commandWords.length == 2 && commandWords[0].equalsIgnoreCase("go")) {
+            return commandWords[1];
+        } else {
+            return null;
+        }
+    }
+
+    public World.Room.Direction checkIfValidDirection(String direction) {
+        for (World.Room.Direction dir : currentRoom.getDirections()) {
+            if (dir.getDirectionName().equalsIgnoreCase(direction)) {
+                return dir;
+            }
+        }
+        return null;
+    }
+
+    public List<World.Room.Direction> printDirections() {
+        List<World.Room.Direction> directions = currentRoom.getDirections();
+        System.out.println("====DIRECTIONS TO ROOMS NEARBY====");
+        for (int i = 0; i < directions.size(); i++) {
+            System.out.println(directions.get(i).getDirectionName());
+            System.out.println(directions.get(i).getRoom() + "\n");
+        }
+        return directions;
     }
 
     public boolean checkIfAtEnd() {
         if (currentRoom.getName().equals(world.getEndingRoom())) {
+            System.out.println("You have reached your final destination");
             return true;
         }
         return false;
     }
 
     public void printCurrentLocation() {
+        System.out.println("====CURRENT ROOM====");
         System.out.println(currentRoom.getDescription());
     }
 
@@ -74,13 +133,12 @@ public class Navigator {
     }
 
     public void setUpWorld() {
-        boolean badAnswer = true;
-        while (badAnswer) {
+        while (true) {
             System.out.println("Is there any particular world you would like me to navigate?" +
                     " Enter 'no' for Siebel, or copy-paste a URL for another.");
             try {
                 if (loadURL(scanner.nextLine())) {
-                    badAnswer = false;
+                    break;
                 }
             } catch (Exception e) {
                 System.out.println("====INVALID URL====");

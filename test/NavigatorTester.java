@@ -119,4 +119,11 @@ public class NavigatorTester {
         tGps.updateLocation("SiebelBasement");
         assertEquals(false, tGps.checkIfAtEnd());
     }
+
+    @Test
+    public void checkListOfDirections() {
+        List<World.Room.Direction> sEntryDirections = sRooms.get(1).getDirections();
+        tGps.updateLocation("SiebelEntry");
+        assertEquals(sEntryDirections, tGps.printDirections());
+    }
 }
