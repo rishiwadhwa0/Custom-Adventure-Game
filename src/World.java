@@ -1,5 +1,13 @@
 import java.util.List;
 
+/**
+ * Classes representing the JSON objects
+ *
+ * World
+ *      Room
+ *          Direction
+ */
+
 //===============================================
 public class World {
     private String startingRoom;

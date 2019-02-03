@@ -7,18 +7,34 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.net.URL;
 
+/**
+ * Navigator class is like a GPS for navigating through a world represented by a JSON Object
+ */
 public class Navigator {
+    /* Siebel URL contains Siebel JSON object */
     private static final String SIEBEL_URL = "https://courses.engr.illinois.edu/cs126/adventure/siebel.json";
 
+    /* Scanner to use to get input */
     private Scanner scanner = new Scanner(System.in);
+
+    /* The world that we are navigating through. */
     private World world;
+
+    /* The world's rooms */
     private List<World.Room> rooms;
+
+    /* The current room we are in */
     private World.Room currentRoom;
 
+    /**
+     * Constructor for Navigator class. Calls the startNavigator method if not in Tester mode.
+     * @param testing is for tester to construct a Navigator object without soliciting user input.
+     */
     public Navigator(boolean testing) {
         if (testing == false) {
             startNavigator();
         } else {
+            //TESTER MODE
             try {
                 loadURL(SIEBEL_URL);
             } catch (Exception e) {
@@ -28,10 +44,17 @@ public class Navigator {
         }
     }
 
+    /**
+     * Main method creates a Navigator object.
+     * @param args unused
+     */
     public static void main(String[] args) {
         Navigator gps = new Navigator(false);
     }
 
+    /**
+     * Copy method of main method, but belongs to this object of Navigator only
+     */
     public void startNavigator() {
         System.out.println("Welcome to NAVIAGATOR");
         setUpWorld();
@@ -47,6 +70,9 @@ public class Navigator {
         }
     }
 
+    /**
+     * Keeps soliciting commands from user until reach end or receive exit command
+     */
     public void requestUserForNextMove() {
         String command = "";
         String direction = "";
@@ -71,6 +97,11 @@ public class Navigator {
         }
     }
 
+    /**
+     * Checks if the "command" from the user is actually a command. Returns the direction if it was a command.
+     * @param command the entire command from the user.
+     * @return only the direction part of the entire command statement, null if not a command.
+     */
     public String commandChecker(String command) {
         if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("exit")) {
             System.exit(0);
@@ -87,6 +118,11 @@ public class Navigator {
         }
     }
 
+    /**
+     * Checks if the directions is one of the directions in the list for the current room we are in.
+     * @param direction the direction the user wants to go.
+     * @return the direction object if that direction exists, null otherwise.
+     */
     public World.Room.Direction checkIfValidDirection(String direction) {
         for (World.Room.Direction dir : currentRoom.getDirections()) {
             if (dir.getDirectionName().equalsIgnoreCase(direction)) {
@@ -96,6 +132,10 @@ public class Navigator {
         return null;
     }
 
+    /**
+     * Prints the directions and the associated rooms for the current room we are in.
+     * @return the List of directions for the current room we are in.
+     */
     public List<World.Room.Direction> printDirections() {
         List<World.Room.Direction> directions = currentRoom.getDirections();
         System.out.println("====DIRECTIONS TO ROOMS NEARBY====");
@@ -106,6 +146,10 @@ public class Navigator {
         return directions;
     }
 
+    /**
+     * Checks if the current room is the ending room.
+     * @return whether we are at the end or not.
+     */
     public boolean checkIfAtEnd() {
         if (currentRoom.getName().equals(world.getEndingRoom())) {
             System.out.println("You have reached your final destination");
@@ -114,6 +158,9 @@ public class Navigator {
         return false;
     }
 
+    /**
+     * Prints the description of the current room we are in.
+     */
     public void printCurrentLocation() {
         System.out.println("====CURRENT ROOM====");
         System.out.println(currentRoom.getDescription());
@@ -121,7 +168,7 @@ public class Navigator {
 
     /**
      * Using Stream API and referencing https://www.baeldung.com/find-list-element-java
-     * @param roomName
+     * @param roomName the name of the room to move to.
      */
     public World.Room updateLocation(String roomName) {
         if (roomName == null) {
@@ -139,14 +186,26 @@ public class Navigator {
         }
     }
 
+    /**
+     * Return the current room object for testing.
+     * @return the current room
+     */
     public World.Room getCurrentRoom() {
         return currentRoom;
     }
 
+    /**
+     * Returns the entire list of rooms for testing
+     * @return the entire list of rooms
+     */
     public List<World.Room> getRooms() {
         return rooms;
     }
 
+    /**
+     * Asks user for a URL, and attempts to get the JSON from the URL if possible
+     * Otherwise, it loads the JSON from a link, known to work.
+     */
     public void setUpWorld() {
         while (true) {
             System.out.println("Is there any particular world you would like me to navigate?" +
@@ -162,6 +221,12 @@ public class Navigator {
         updateLocation(world.getStartingRoom());
     }
 
+    /**
+     * Checks if the user didn't want to load from a url, and tries to load from a url if the user specified one
+     * @param url the url to load, could be a command to not load the url
+     * @return whether any url was loaded from or not.
+     * @throws Exception an exception if the url is invalid
+     */
     public boolean loadURL(String url) throws Exception {
         Gson gson = new Gson();
         if (url.equalsIgnoreCase("no")) {
