@@ -92,7 +92,7 @@ public class Navigator {
                 }
             } else {
                 //i.e. it was an invalid command
-                System.out.println("I don't understand " + command);
+                System.out.println("I don't understand '" + command + "'");
             }
         }
     }
