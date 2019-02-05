@@ -251,7 +251,7 @@ public class Navigator {
                 world = gson.fromJson(json, World.class);
                 rooms = world.getRooms();
 
-                if (rooms == null) {
+                if (!worldValidityChecker(world, rooms)) {
                     System.out.println("====WORLD NOT COMPATIBLE WITH NAVIGATOR====");
                     return false;
                 }
@@ -261,5 +261,28 @@ public class Navigator {
             }
             return false;
         }
+    }
+
+    private boolean worldValidityChecker(World worldToCheck, List<World.Room> roomsToCheck) {
+        if (worldToCheck.getStartingRoom() == null || worldToCheck.getEndingRoom() == null ||
+                roomsToCheck == null) {
+            return false;
+        }
+
+        for (int i = 0; i < roomsToCheck.size(); i++) {
+            World.Room room = roomsToCheck.get(i);
+            if (room.getDirections() == null || room.getName() == null || room.getDescription() == null) {
+                return false;
+            }
+
+            List<World.Room.Direction> directions = room.getDirections();
+            for (int dI = 0; dI < directions.size(); dI++) {
+                World.Room.Direction dir = directions.get(dI);
+                if (dir.getDirectionName() == null || dir.getRoom() == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
