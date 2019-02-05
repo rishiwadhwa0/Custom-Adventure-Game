@@ -12,7 +12,8 @@ import java.net.URL;
  */
 public class Navigator {
     /* Siebel URL contains Siebel JSON object */
-    private static final String SIEBEL_URL = "https://courses.engr.illinois.edu/cs126/adventure/siebel.json";
+    private static final String SIEBEL_URL =
+            "https://courses.engr.illinois.edu/cs126/adventure/siebel.json";
 
     /* Scanner to use to get input */
     private Scanner scanner = new Scanner(System.in);
@@ -63,7 +64,8 @@ public class Navigator {
             printCurrentLocation();
             printDirections();
             if (firstTime) {
-                System.out.println("You can let me know where you want to go to by sending the command 'go compass_direction'.");
+                System.out.println("You can let me know where you want to go to by sending " +
+                        "the command 'go compass_direction'.");
                 firstTime = false;
             }
             requestUserForNextMove();
@@ -98,7 +100,8 @@ public class Navigator {
     }
 
     /**
-     * Checks if the "command" from the user is actually a command. Returns the direction if it was a command.
+     * Checks if the "command" from the user is actually a command.
+     * Returns the direction if it was a command.
      * @param command the entire command from the user.
      * @return only the direction part of the entire command statement, null if not a command.
      */
@@ -141,7 +144,7 @@ public class Navigator {
         System.out.println("====DIRECTIONS TO ROOMS NEARBY====");
         for (int i = 0; i < directions.size(); i++) {
             System.out.println(directions.get(i).getDirectionName());
-            System.out.println(directions.get(i).getRoom() + "\n");
+            //System.out.println(directions.get(i).getRoom() + "\n");
         }
         return directions;
     }
@@ -152,6 +155,7 @@ public class Navigator {
      */
     public boolean checkIfAtEnd() {
         if (currentRoom.getName().equals(world.getEndingRoom())) {
+            printCurrentLocation();
             System.out.println("You have reached your final destination");
             return true;
         }
@@ -175,8 +179,8 @@ public class Navigator {
             return null;
         }
 
-        World.Room roomToMove = rooms.stream().filter(room -> roomName.equalsIgnoreCase(room.getName())).findAny().
-                orElse(null);
+        World.Room roomToMove = rooms.stream().filter(room -> roomName.
+                equalsIgnoreCase(room.getName())).findAny().orElse(null);
 
         if (roomToMove == null) {
             return null;
@@ -222,7 +226,8 @@ public class Navigator {
     }
 
     /**
-     * Checks if the user didn't want to load from a url, and tries to load from a url if the user specified one
+     * Checks if the user didn't want to load from a url, and tries to
+     * load from a url if the user specified one
      * @param url the url to load, could be a command to not load the url
      * @return whether any url was loaded from or not.
      * @throws Exception an exception if the url is invalid
