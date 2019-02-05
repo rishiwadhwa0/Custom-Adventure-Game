@@ -86,35 +86,71 @@ public class NavigatorTester {
         try {
             assertEquals(true, tGps.loadURL("https://courses.engr.illinois.edu/cs126/adventure/siebel.json"));
         } catch (Exception e) {
-            System.out.println("invalid url");
+            System.out.println(e.getMessage());
         }
     }
 
     @Test
     public void checkLoadDefault() {
+        String loadingURLResult = "";
         try {
-            assertEquals(true, tGps.loadURL("No"));
+             if (tGps.loadURL("No")) {
+                 loadingURLResult = "successful";
+             }
         } catch (Exception e) {
-            System.out.println("invalid url");
+            System.out.println(e.getMessage());
+            loadingURLResult = "exception";
         }
+
+        assertEquals("successful", loadingURLResult);
     }
 
     @Test
     public void checkLoadNull() {
+        String loadingURLResult = "";
         try {
-            tGps.loadURL(null);
+            if (tGps.loadURL(null)) {
+                loadingURLResult = "successful";
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            loadingURLResult = "exception";
         }
+
+        assertEquals("exception", loadingURLResult);
     }
 
     @Test
     public void checkInvalidURL() {
+        String loadingURLResult = "";
         try {
-            tGps.loadURL("invalid url");
+            if (tGps.loadURL("invalid url")) {
+                loadingURLResult = "successful";
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            loadingURLResult = "exception";
         }
+
+        assertEquals("exception", loadingURLResult);
+    }
+
+    @Test
+    public void checkIncompatibleWorld() {
+        String loadingURLResult = "";
+        try {
+            if (tGps.loadURL("http://api.tvmaze.com/singlesearch/" +
+                    "shows?q=game-of-thrones&embed=episodes")) {
+                loadingURLResult = "successful";
+            } else {
+                loadingURLResult = "validURLButInvalidJSON";
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            loadingURLResult = "exception";
+        }
+
+        assertEquals("validURLButInvalidJSON", loadingURLResult);
     }
 
     //============UPDATE LOCATION METHOD TESTS============
@@ -195,7 +231,7 @@ public class NavigatorTester {
 
     //===========CHECK IF VALID DIR METHOD TESTS===============
     @Test
-    public void checkInvalidDirectionTwoWord() {
+    public void checkInvalidDirection() {
         assertEquals(null, tGps.checkIfValidDirection("EastNorth"));
     }
 

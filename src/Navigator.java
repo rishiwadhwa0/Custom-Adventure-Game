@@ -156,7 +156,8 @@ public class Navigator {
     public boolean checkIfAtEnd() {
         if (currentRoom.getName().equals(world.getEndingRoom())) {
             printCurrentLocation();
-            System.out.println("You have reached your final destination");
+            System.out.println("====SUCCESS!!!====");
+            System.out.println("You have reached your final destination.");
             return true;
         }
         return false;
@@ -249,6 +250,12 @@ public class Navigator {
                 String json = stringHttpResponse.getBody();
                 world = gson.fromJson(json, World.class);
                 rooms = world.getRooms();
+
+                if (rooms == null) {
+                    System.out.println("====WORLD NOT COMPATIBLE WITH NAVIGATOR====");
+                    return false;
+                }
+
                 System.out.println("====WORLD LOADED FROM YOUR URL====");
                 return true;
             }
