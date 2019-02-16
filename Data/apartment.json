@@ -2,7 +2,8 @@
   "startingRoom": "Outside",
   "endingRoom": "Rishi's Closet",
   "player": {
-    "items": []
+    "items": [],
+    "hp": 100
   },
   "rooms": [
     {

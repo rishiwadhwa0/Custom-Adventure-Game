@@ -1,5 +1,7 @@
 import java.net.MalformedURLException;
+import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -11,6 +13,29 @@ import java.net.URL;
  * Navigator class is like a GPS for navigating through a world represented by a JSON Object
  */
 public class Navigator {
+    /* Guessing bound */
+    public static final int GUESS_BOUND = 26;
+
+    /** Difference to kill the monster */
+    public static final int KILL_DIFFERENCE = 2;
+
+    /* Difference to get away from monster without any damage. */
+    public static final int NO_DAMAGE_DIFFERENCE = 5;
+
+    /* Difference to take 50 HP points of damage. */
+    public static final int HALF_DAMAGE_DIFFERENCE = 10;
+
+    /** Amount of HP damage done if guess withing 10. */
+    public static final int DAMAGE_VALUE = 50;
+
+    /* Monster directions */
+    private static final String DIRECTIONS = "You have encountered a monster.\n" +
+                                             "The monster will pick an integer between 0 and 25.\n" +
+                                             "If you're number is within 2 of the monster's, you kill it." +
+                                             "Otherwise, if you pick a number that's within 5 of the Monster's, nothing happens.\n" +
+                                             "Otherwise, if you pick a number that was within 10, you lose 50 HP.\n" +
+                                             "Otherwise, your HP goes to 0.\n";
+
     /* JSON string */
     private static final String APARTMENT_JSON = Data.getFileContentsAsString("apartment.json");
 
@@ -62,6 +87,8 @@ public class Navigator {
         while (!checkIfAtEnd()) {
             printCurrentLocation();
             printDirections();
+            handleMonster();
+            checkIfAlive();
             if (firstTime) {
                 System.out.println("You can let me know where you want to go to by sending " +
                         "the command 'go compass_direction'.");
@@ -69,6 +96,42 @@ public class Navigator {
             }
             requestUserForNextMove();
         }
+    }
+
+    public void handleMonster() {
+        if (checkIfMonster()) {
+            System.out.println("========MONSTER ALERT!!!!=======");
+            System.out.println(DIRECTIONS);
+            Random rand = new Random();
+            int monsterNumber = rand.nextInt(GUESS_BOUND);
+            int userNumber = scanner.nextInt();
+            System.out.println("The monster's number was: " + monsterNumber);
+            if (Math.abs(monsterNumber - userNumber) <= KILL_DIFFERENCE) {
+                currentRoom.setMonster("false");
+                System.out.println("You're a lucky lad! You've defeated the monster.");
+            } else if (Math.abs(monsterNumber - userNumber) <= NO_DAMAGE_DIFFERENCE) {
+                System.out.println("You get away unscathed this time...");
+            } else if (Math.abs(monsterNumber - userNumber) <= HALF_DAMAGE_DIFFERENCE) {
+                world.getPlayer().setHp(world.getPlayer().getHp() - DAMAGE_VALUE);
+                System.out.println("You took a hard hit, and you're down 50 HP!");
+            } else {
+                world.getPlayer().setHp(0);
+            }
+        }
+    }
+
+    private void checkIfAlive() {
+        if (world.getPlayer().getHp() <= 0) {
+            System.out.println("Unfortunately, you're HP is at 0 and you are in no condition to continue the game.");
+            System.exit(0);
+        }
+    }
+
+    public boolean checkIfMonster() {
+        if (currentRoom.getMonster().equalsIgnoreCase("true")) {
+            return true;
+        }
+        return false;
     }
 
     /**

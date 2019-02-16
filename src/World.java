@@ -37,6 +37,7 @@ public class World {
     //===========================================
     public class Player {
         private List<Room.Item> items;
+        private int hp;
 
         public void addItem(Room.Item itemToAdd) {
             items.add(itemToAdd);
@@ -46,7 +47,13 @@ public class World {
             return items;
         }
 
+        public void setHp(int hp) {
+            this.hp = hp;
+        }
 
+        public int getHp() {
+            return hp;
+        }
     }
     //===========================================
     public class Room {
