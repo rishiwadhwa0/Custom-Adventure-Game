@@ -88,6 +88,14 @@ public class Navigator {
                 if (handleGoCommand(command)) {
                     break;
                 }
+            } else if (commandType.equals("usewith")) {
+                if (handleUsewithCommand(command)) {
+                    break;
+                }
+            } else if (commandType.equals("pickup")) {
+                if (handlePickupCommand(command)) {
+                    break;
+                }
             } else {
                 System.out.println("I don't understand '" + command + "'");
             }
@@ -98,14 +106,69 @@ public class Navigator {
         String [] commandWords = command.split(" ");
         if (commandWords[0].equalsIgnoreCase("go")) {
             return "go";
-        } else if (commandWords.length >= 3 && commandWords[0].equalsIgnoreCase("use") && 
+        } else if (commandWords.length > 3 && commandWords[0].equalsIgnoreCase("use") &&
                 commandWords[2].equalsIgnoreCase("with")) {
             return "usewith";
-        } else if (commandWords[0].equalsIgnoreCase("pickup")) {
+        } else if (commandWords.length > 1 && commandWords[0].equalsIgnoreCase("pickup")) {
             return "pickup";
         } else {
             return "Not A Command";
         }
+    }
+
+    private boolean handlePickupCommand(String command) {
+        String [] commandWords = command.split(" ");
+        String itemToPickUp = commandWords[1];
+        List<World.Room.Item> roomItems = currentRoom.getItems();
+
+        World.Room.Item itemInRoom = roomItems.stream().filter(item -> itemToPickUp.
+                equalsIgnoreCase(item.getName())).findAny().orElse(null);
+
+        if (itemInRoom == null) {
+            System.out.println("That item does not exist in this room.");
+            return false;
+        }
+
+        world.getPlayer().addItem(itemInRoom);
+        roomItems.remove(itemInRoom);
+        return true;
+    }
+
+    private boolean handleUsewithCommand(String command) {
+        String [] commandWords = command.split(" ");
+        String itemNameToCheck = commandWords[1];
+        List<World.Room.Item> playerItems = world.getPlayer().getItems();
+
+        World.Room.Item itemToUse = playerItems.stream().filter(item -> itemNameToCheck.
+                equalsIgnoreCase(item.getName())).findAny().orElse(null);
+
+        if (itemToUse == null) {
+            System.out.println("You don't have that item.");
+            return false;
+        }
+
+        String direction = commandWords[3];
+        World.Room.Direction validDir = checkIfValidDirection(direction);
+        if (validDir == null) {
+            System.out.println("That's not a valid direction.");
+            return false;
+        } else if (!(itemInValidKeyNames(itemToUse, validDir))) {
+            System.out.println("I can't use " + commandWords[1] + " to go in that direction.");
+            return false;
+        }
+
+        updateLocation(validDir.getRoom());
+        return true;
+    }
+
+    private boolean itemInValidKeyNames(World.Room.Item itemToUse, World.Room.Direction validDir) {
+        for (String keyName : validDir.getValidKeyNames()) {
+            if (keyName.equalsIgnoreCase(itemToUse.getName())) {
+                validDir.setEnabled("true");
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean handleGoCommand(String command) {
@@ -115,13 +178,13 @@ public class Navigator {
             return false;
         }
 
-        World.Room.Direction dirInList = checkIfValidDirection(direction);
-        if (dirInList == null) {
+        World.Room.Direction validDir = checkIfValidDirection(direction);
+        if (validDir == null || validDir.getEnabled().equalsIgnoreCase("false")) {
             System.out.println("I can't go in the direction of " + direction);
             return false;
         }
 
-        updateLocation(dirInList.getRoom());
+        updateLocation(validDir.getRoom());
         return true;
     }
 
@@ -152,9 +215,6 @@ public class Navigator {
     public World.Room.Direction checkIfValidDirection(String direction) {
         for (World.Room.Direction dir : currentRoom.getDirections()) {
             if (dir.getDirectionName().equalsIgnoreCase(direction)) {
-                if (dir.getEnabled().equalsIgnoreCase("false")) {
-                    return null;
-                }
                 return dir;
             }
         }

@@ -19,7 +19,7 @@
           "directionName": "East",
           "room": "Living Room",
           "enabled": "false",
-          "validKeyNames": ["Key Under Mat"]
+          "validKeyNames": ["Key_Under_Mat"]
         }
       ]
     },
@@ -223,7 +223,7 @@
           "directionName": "North",
           "room": "Rishi's Closet",
           "enabled": "false",
-          "validKeyNames": []
+          "validKeyNames": ["Mystery_Key"]
         }
       ]
     },
@@ -237,7 +237,7 @@
           "directionName": "South",
           "room": "Rishi's Bedroom",
           "enabled": "true",
-          "validKeyNames": ["Mystery Key"]
+          "validKeyNames": []
         }
       ]
     }

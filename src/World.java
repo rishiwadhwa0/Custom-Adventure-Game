@@ -38,8 +38,8 @@ public class World {
     public class Player {
         private List<Room.Item> items;
 
-        public void setItems(List<Room.Item> items) {
-            this.items = items;
+        public void addItem(Room.Item itemToAdd) {
+            items.add(itemToAdd);
         }
 
         public List<Room.Item> getItems() {
@@ -70,10 +70,6 @@ public class World {
 
         public String getMonster() {
             return monster;
-        }
-
-        public void setItems(List<Item> items) {
-            this.items = items;
         }
 
         public List<Item> getItems() {
