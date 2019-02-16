@@ -152,6 +152,9 @@ public class Navigator {
     public World.Room.Direction checkIfValidDirection(String direction) {
         for (World.Room.Direction dir : currentRoom.getDirections()) {
             if (dir.getDirectionName().equalsIgnoreCase(direction)) {
+                if (dir.getEnabled().equalsIgnoreCase("false")) {
+                    return null;
+                }
                 return dir;
             }
         }
@@ -167,7 +170,6 @@ public class Navigator {
         System.out.println("====DIRECTIONS TO ROOMS NEARBY====");
         for (int i = 0; i < directions.size(); i++) {
             System.out.println(directions.get(i).getDirectionName());
-            //System.out.println(directions.get(i).getRoom() + "\n");
         }
         return directions;
     }
@@ -192,6 +194,11 @@ public class Navigator {
     public void printCurrentLocation() {
         System.out.println("====CURRENT ROOM====");
         System.out.println(currentRoom.getDescription());
+        System.out.print("ITEMS: ");
+        for (World.Room.Item item : currentRoom.getItems()) {
+            System.out.print(item.getName() + " ");
+        }
+        System.out.println("");
     }
 
     /**
@@ -237,7 +244,7 @@ public class Navigator {
     public void setUpWorld() {
         while (true) {
             System.out.println("Is there any particular world you would like me to navigate?" +
-                    " Enter 'no' for Siebel, or copy-paste a URL for another.");
+                    " Enter 'no' for Apartment, or copy-paste a URL for another.");
             try {
                 if (loadURL(scanner.nextLine())) {
                     break;
