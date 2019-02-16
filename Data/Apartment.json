@@ -209,19 +209,35 @@
     },
     {
       "name": "Rishi's Bedroom",
-      "description": "In Rishi's bedroom. ",
+      "description": "In Rishi's bedroom, aka where the party's at.",
       "monster": "false",
-      "items": [
-        {
-          "name": "Key Under Mat"
-        }
-      ],
+      "items": [],
       "directions": [
         {
-          "directionName": "East",
-          "room": "Living Room",
+          "directionName": "West",
+          "room": "Southeast Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "North",
+          "room": "Rishi's Closet",
           "enabled": "false",
-          "validKeyNames": ["Key Under Mat"]
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Rishi's Closet",
+      "description": "In Rishi's closet. You'll find a bunch of clothes and a cordless vacuum.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "South",
+          "room": "Rishi's Bedroom",
+          "enabled": "true",
+          "validKeyNames": ["Mystery Key"]
         }
       ]
     }
