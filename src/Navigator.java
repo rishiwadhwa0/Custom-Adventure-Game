@@ -11,9 +11,8 @@ import java.net.URL;
  * Navigator class is like a GPS for navigating through a world represented by a JSON Object
  */
 public class Navigator {
-    /* Siebel URL contains Siebel JSON object */
-    private static final String SIEBEL_URL =
-            "https://courses.engr.illinois.edu/cs126/adventure/siebel.json";
+    /* JSON string */
+    private static final String APARTMENT_JSON = Data.getFileContentsAsString("apartment.json");
 
     /* Scanner to use to get input */
     private Scanner scanner = new Scanner(System.in);
@@ -37,7 +36,7 @@ public class Navigator {
         } else {
             //TESTER MODE
             try {
-                loadURL(SIEBEL_URL);
+                loadURL(APARTMENT_JSON  );
             } catch (Exception e) {
                 System.out.println("====INVALID URL====");
             }
@@ -236,12 +235,9 @@ public class Navigator {
     public boolean loadURL(String url) throws Exception {
         Gson gson = new Gson();
         if (url.equalsIgnoreCase("no")) {
-            // Make an HTTP request to default URL
-            final HttpResponse<String> stringHttpResponse = Unirest.get(SIEBEL_URL).asString();
-            String json = stringHttpResponse.getBody();
-            world = gson.fromJson(json, World.class);
+            world = gson.fromJson(APARTMENT_JSON, World.class);
             rooms = world.getRooms();
-            System.out.println("====WORLD LOADED FROM DEFAULT SIEBEL URL====");
+            System.out.println("====WORLD LOADED FROM DEFAULT APARTMENT FILE====");
             return true;
         } else {
             // Make an HTTP request to user's URL
@@ -251,10 +247,12 @@ public class Navigator {
                 world = gson.fromJson(json, World.class);
                 rooms = world.getRooms();
 
+                /*
                 if (!worldValidityChecker(world, rooms)) {
                     System.out.println("====WORLD NOT COMPATIBLE WITH NAVIGATOR====");
                     return false;
                 }
+                */
 
                 System.out.println("====WORLD LOADED FROM YOUR URL====");
                 return true;
@@ -263,6 +261,7 @@ public class Navigator {
         }
     }
 
+    /*
     private boolean worldValidityChecker(World worldToCheck, List<World.Room> roomsToCheck) {
         if (worldToCheck.getStartingRoom() == null || worldToCheck.getEndingRoom() == null ||
                 roomsToCheck == null) {
@@ -285,4 +284,5 @@ public class Navigator {
         }
         return true;
     }
+    */
 }

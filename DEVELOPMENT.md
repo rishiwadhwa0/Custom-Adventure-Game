@@ -7,6 +7,8 @@
 #### Plan to accomplish changes for Adventure 2:
 - [x] Edit World class to represent new JSON schema
 - [] Allow two new user-commands for this assignment and implement functionality to handle these commands
-- [] Write a new JSON file to work with
+- [x] Write a new JSON file to work with
 - [] Allow user to specify URL of filename and load JSON from there using command line
 - [] Add a new feature (i.e. extending the game) - Create a monster which user has to defeat based on chance!!!
+
+###### Updates:
