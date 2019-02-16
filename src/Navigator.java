@@ -80,7 +80,7 @@ public class Navigator {
         String direction = "";
         while (true) {
             command = scanner.nextLine();
-            direction = commandChecker(command);
+            direction = formatCommand(command);
             if (direction != null) {
                 //i.e. it was a valid command
                 World.Room.Direction dirInList = checkIfValidDirection(direction);
@@ -105,7 +105,7 @@ public class Navigator {
      * @param command the entire command from the user.
      * @return only the direction part of the entire command statement, null if not a command.
      */
-    public String commandChecker(String command) {
+    public String formatCommand(String command) {
         if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("exit")) {
             System.exit(0);
         }

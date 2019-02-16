@@ -212,22 +212,22 @@ public class NavigatorTester {
     //============COMMAND CHECKER METHOD TESTS==============
     @Test
     public void checkValidCommand() {
-        assertEquals("fish.", tGps.commandChecker("gO fish."));
+        assertEquals("fish.", tGps.formatCommand("gO fish."));
     }
 
     @Test
     public void checkValidCommandThreeWord() {
-        assertEquals("salmon fish.", tGps.commandChecker("Go salmon fish."));
+        assertEquals("salmon fish.", tGps.formatCommand("Go salmon fish."));
     }
 
     @Test
     public void checkInvalidCommand() {
-        assertEquals(null, tGps.commandChecker(": - ) : - ) : - )"));
+        assertEquals(null, tGps.formatCommand(": - ) : - ) : - )"));
     }
 
     @Test
     public void checkValidCommandAndDirection() {
-        assertEquals("EasT", tGps.commandChecker("GO EasT    "));
+        assertEquals("EasT", tGps.formatCommand("GO EasT    "));
     }
 
     //===========CHECK IF VALID DIR METHOD TESTS===============

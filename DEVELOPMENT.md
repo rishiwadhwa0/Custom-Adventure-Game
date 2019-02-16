@@ -1,11 +1,11 @@
 #### Fixes based on Adventure 1 Feedback:
-- [] Rename commandChecker to formatCommand and change the calls to the function
+- [x] Rename commandChecker to formatCommand and change the calls to the function
 - [] fix any other naming issues you see
 - [] Check for invalid JSON by placing functions in other classes (i.e. assigning responsibilities to my objects)
 - [] make tests more organized this time
 
 #### Plan to accomplish changes for Adventure 2:
-- [] Edit World class to represent new JSON schema
+- [x] Edit World class to represent new JSON schema
 - [] Allow two new user-commands for this assignment and implement functionality to handle these commands
 - [] Write a new JSON file to work with
 - [] Allow user to specify URL of filename and load JSON from there using command line

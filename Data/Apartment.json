@@ -1,0 +1,229 @@
+{
+  "startingRoom": "Outside",
+  "endingRoom": "Rishi's Closet",
+  "player": {
+    "items": []
+  },
+  "rooms": [
+    {
+      "name": "Outside",
+      "description": "Outside apartment. Facing entry-door.",
+      "monster": "false",
+      "items": [
+        {
+          "name": "Key Under Mat"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "Living Room",
+          "enabled": "false",
+          "validKeyNames": ["Key Under Mat"]
+        }
+      ]
+    },
+    {
+      "name": "Living Room",
+      "description": "In living room. Where the peeps have fun.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "Balcony",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "West",
+          "room": "Outside",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "Southwest",
+          "room": "Southwest Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "Southeast",
+          "room": "Southeast Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Balcony",
+      "description": "On Balcony. Can see the park and 212.",
+      "monster": "true",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "Living Room",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Southwest Hallway",
+      "description": "In Southwest hallway. Pretty narrow.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "North",
+          "room": "Living Room",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "Northwest",
+          "room": "Srikar's Bedroom",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "Southwest",
+          "room": "Dhvanil's Bedroom",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "East",
+          "room": "West Bathroom",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Srikar's Bedroom",
+      "description": "In Srikar's bedroom. Messy 50% of the time.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "Southwest Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Dhvanil's Bedroom",
+      "description": "In Dhvanil's bedroom. He makes his bed everyday.",
+      "monster": "false",
+      "items": [
+        {
+          "name": "Mystery Key"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "Southwest Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "West Bathroom",
+      "description": "In West bathroom. Smells like Febreze.",
+      "monster": "true",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "Southwest Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Southeast Hallway",
+      "description": "In southeast hallway. Pretty narrow.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "North",
+          "room": "Living Room",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "West",
+          "room": "East Bathroom",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "Southeast",
+          "room": "Ronak's Bedroom",
+          "enabled": "true",
+          "validKeyNames": []
+        },
+        {
+          "directionName": "Northeast",
+          "room": "Rishi's Bedroom",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "East Bathroom",
+      "description": "In East bathroom. Always nice and tidy.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "Southeast Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Ronak's Bedroom",
+      "description": "In Ronak's bedroom. Ronak's always in his room.",
+      "monster": "false",
+      "items": [],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "Southeast Hallway",
+          "enabled": "true",
+          "validKeyNames": []
+        }
+      ]
+    },
+    {
+      "name": "Rishi's Bedroom",
+      "description": "In Rishi's bedroom. ",
+      "monster": "false",
+      "items": [
+        {
+          "name": "Key Under Mat"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "Living Room",
+          "enabled": "false",
+          "validKeyNames": ["Key Under Mat"]
+        }
+      ]
+    }
+  ]
+}
