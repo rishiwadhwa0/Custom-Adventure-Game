@@ -11,7 +11,7 @@
       "monster": "false",
       "items": [
         {
-          "name": "Key Under Mat"
+          "name": "Key_Under_Mat"
         }
       ],
       "directions": [
@@ -121,7 +121,7 @@
       "monster": "false",
       "items": [
         {
-          "name": "Mystery Key"
+          "name": "Mystery_Key"
         }
       ],
       "directions": [

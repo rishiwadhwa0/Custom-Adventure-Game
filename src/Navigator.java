@@ -79,23 +79,50 @@ public class Navigator {
         String direction = "";
         while (true) {
             command = scanner.nextLine();
-            direction = formatCommand(command);
-            if (direction != null) {
-                //i.e. it was a valid command
-                World.Room.Direction dirInList = checkIfValidDirection(direction);
-                if (dirInList != null) {
-                    //i.e. it was a feasible direction
-                    updateLocation(dirInList.getRoom());
+            if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("exit")) {
+                System.exit(0);
+            }
+            
+            String commandType = findCommandType(command);
+            if (commandType.equals("go")) {
+                if (handleGoCommand(command)) {
                     break;
-                } else {
-                    //i.e. it was an infeasible direction
-                    System.out.println("I can't go in the direction of " + direction);
                 }
             } else {
-                //i.e. it was an invalid command
                 System.out.println("I don't understand '" + command + "'");
             }
         }
+    }
+
+    private String findCommandType(String command) {
+        String [] commandWords = command.split(" ");
+        if (commandWords[0].equalsIgnoreCase("go")) {
+            return "go";
+        } else if (commandWords.length >= 3 && commandWords[0].equalsIgnoreCase("use") && 
+                commandWords[2].equalsIgnoreCase("with")) {
+            return "usewith";
+        } else if (commandWords[0].equalsIgnoreCase("pickup")) {
+            return "pickup";
+        } else {
+            return "Not A Command";
+        }
+    }
+
+    private boolean handleGoCommand(String command) {
+        String direction = getDirectionFromGo(command);
+        if (direction == null) {
+            System.out.println("I don't understand '" + command + "'");
+            return false;
+        }
+
+        World.Room.Direction dirInList = checkIfValidDirection(direction);
+        if (dirInList == null) {
+            System.out.println("I can't go in the direction of " + direction);
+            return false;
+        }
+
+        updateLocation(dirInList.getRoom());
+        return true;
     }
 
     /**
@@ -104,12 +131,9 @@ public class Navigator {
      * @param command the entire command from the user.
      * @return only the direction part of the entire command statement, null if not a command.
      */
-    public String formatCommand(String command) {
-        if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("exit")) {
-            System.exit(0);
-        }
+    public String getDirectionFromGo(String command) {
         String [] commandWords = command.split(" ");
-        if (commandWords.length > 1 && commandWords[0].equalsIgnoreCase("go")) {
+        if (commandWords.length > 1) {
             String direction = "";
             for (int i = 1; i < commandWords.length; i++) {
                 direction = direction + commandWords[i] + " ";
