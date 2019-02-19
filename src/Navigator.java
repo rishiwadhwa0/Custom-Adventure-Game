@@ -14,7 +14,7 @@ import java.net.URL;
  */
 public class Navigator {
     /* Guessing bound */
-    public static final int GUESS_BOUND = 26;
+    public static final int GUESS_BOUND = 21;
 
     /** Difference to kill the monster */
     public static final int KILL_DIFFERENCE = 2;
@@ -30,11 +30,11 @@ public class Navigator {
 
     /* Monster directions */
     private static final String DIRECTIONS = "You have encountered a monster.\n" +
-                                             "The monster will pick an integer between 0 and 25.\n" +
-                                             "If you're number is within 2 of the monster's, you kill it." +
-                                             "Otherwise, if you pick a number that's within 5 of the Monster's, nothing happens.\n" +
-                                             "Otherwise, if you pick a number that was within 10, you lose 50 HP.\n" +
-                                             "Otherwise, your HP goes to 0.\n";
+                                             "The monster will pick an integer between 0 and " + GUESS_BOUND + ".\n" +
+                                             "You're number is within 2 of the monster's   --> you kill it.\n" +
+                                             "You're number is within 5 of the Monster's   --> nothing happens.\n" +
+                                             "You're number is within 10 of the Monster's  --> you lose 50 HP.\n" +
+                                             "Otherwise                                    --> your HP goes to 0.\n";
 
     /* JSON string */
     private static final String APARTMENT_JSON = Data.getFileContentsAsString("apartment.json");
@@ -51,10 +51,7 @@ public class Navigator {
     /* The current room we are in */
     private World.Room currentRoom;
 
-    /**
-     * Constructor for Navigator class. Calls the startNavigator method if not in Tester mode.
-     * @param testing is for tester to construct a Navigator object without soliciting user input.
-     */
+
     public Navigator(boolean testing) {
         if (testing == false) {
             startNavigator();
@@ -69,17 +66,12 @@ public class Navigator {
         }
     }
 
-    /**
-     * Main method creates a Navigator object.
-     * @param args unused
-     */
+
     public static void main(String[] args) {
         Navigator gps = new Navigator(false);
     }
 
-    /**
-     * Copy method of main method, but belongs to this object of Navigator only
-     */
+
     public void startNavigator() {
         System.out.println("Welcome to NAVIAGATOR");
         setUpWorld();
@@ -105,24 +97,27 @@ public class Navigator {
             Random rand = new Random();
             int monsterNumber = rand.nextInt(GUESS_BOUND);
             int userNumber = scanner.nextInt();
+            scanner.nextLine();
             System.out.println("The monster's number was: " + monsterNumber);
             if (Math.abs(monsterNumber - userNumber) <= KILL_DIFFERENCE) {
                 currentRoom.setMonster("false");
-                System.out.println("You're a lucky lad! You've defeated the monster.");
+                System.out.println("====You defeated the monster====\n");
             } else if (Math.abs(monsterNumber - userNumber) <= NO_DAMAGE_DIFFERENCE) {
-                System.out.println("You get away unscathed this time...");
+                System.out.println("====You get away unscathed====\n");
             } else if (Math.abs(monsterNumber - userNumber) <= HALF_DAMAGE_DIFFERENCE) {
                 world.getPlayer().setHp(world.getPlayer().getHp() - DAMAGE_VALUE);
-                System.out.println("You took a hard hit, and you're down 50 HP!");
+                System.out.println("====You took a hard hit====\n");
             } else {
                 world.getPlayer().setHp(0);
             }
+            printCurrentLocation();
+            printDirections();
         }
     }
 
     private void checkIfAlive() {
         if (world.getPlayer().getHp() <= 0) {
-            System.out.println("Unfortunately, you're HP is at 0 and you are in no condition to continue the game.");
+            System.out.println("====Unfortunately, you're HP is 0 and you're in no condition to continue the game====");
             System.exit(0);
         }
     }
@@ -251,12 +246,7 @@ public class Navigator {
         return true;
     }
 
-    /**
-     * Checks if the "command" from the user is actually a command.
-     * Returns the direction if it was a command.
-     * @param command the entire command from the user.
-     * @return only the direction part of the entire command statement, null if not a command.
-     */
+
     public String getDirectionFromGo(String command) {
         String [] commandWords = command.split(" ");
         if (commandWords.length > 1) {
@@ -270,11 +260,7 @@ public class Navigator {
         }
     }
 
-    /**
-     * Checks if the directions is one of the directions in the list for the current room we are in.
-     * @param direction the direction the user wants to go.
-     * @return the direction object if that direction exists, null otherwise.
-     */
+
     public World.Room.Direction checkIfValidDirection(String direction) {
         for (World.Room.Direction dir : currentRoom.getDirections()) {
             if (dir.getDirectionName().equalsIgnoreCase(direction)) {
@@ -284,10 +270,7 @@ public class Navigator {
         return null;
     }
 
-    /**
-     * Prints the directions and the associated rooms for the current room we are in.
-     * @return the List of directions for the current room we are in.
-     */
+
     public List<World.Room.Direction> printDirections() {
         List<World.Room.Direction> directions = currentRoom.getDirections();
         System.out.println("====DIRECTIONS TO ROOMS NEARBY====");
@@ -297,10 +280,7 @@ public class Navigator {
         return directions;
     }
 
-    /**
-     * Checks if the current room is the ending room.
-     * @return whether we are at the end or not.
-     */
+
     public boolean checkIfAtEnd() {
         if (currentRoom.getName().equals(world.getEndingRoom())) {
             printCurrentLocation();
@@ -311,9 +291,7 @@ public class Navigator {
         return false;
     }
 
-    /**
-     * Prints the description of the current room we are in.
-     */
+
     public void printCurrentLocation() {
         System.out.println("====CURRENT ROOM====");
         System.out.println(currentRoom.getDescription());
@@ -321,13 +299,10 @@ public class Navigator {
         for (World.Room.Item item : currentRoom.getItems()) {
             System.out.print(item.getName() + " ");
         }
-        System.out.println("");
+        System.out.println("\nHP: " + world.getPlayer().getHp());
     }
 
-    /**
-     * Using Stream API and referencing https://www.baeldung.com/find-list-element-java
-     * @param roomName the name of the room to move to.
-     */
+
     public World.Room updateLocation(String roomName) {
         if (roomName == null) {
             return null;
@@ -344,30 +319,21 @@ public class Navigator {
         }
     }
 
-    /**
-     * Return the current room object for testing.
-     * @return the current room
-     */
+
     public World.Room getCurrentRoom() {
         return currentRoom;
     }
 
-    /**
-     * Returns the entire list of rooms for testing
-     * @return the entire list of rooms
-     */
+
     public List<World.Room> getRooms() {
         return rooms;
     }
 
-    /**
-     * Asks user for a URL, and attempts to get the JSON from the URL if possible
-     * Otherwise, it loads the JSON from a link, known to work.
-     */
+
     public void setUpWorld() {
         while (true) {
-            System.out.println("Is there any particular world you would like me to navigate?" +
-                    " Enter 'no' for Apartment, or copy-paste a URL for another.");
+            System.out.println("Is there any particular world you would like me to navigate? " +
+                    "Enter 'local' for local file, 'default' for Apartment file, or copy-paste a URL for remote file.");
             try {
                 if (loadURL(scanner.nextLine())) {
                     break;
@@ -379,16 +345,23 @@ public class Navigator {
         updateLocation(world.getStartingRoom());
     }
 
-    /**
-     * Checks if the user didn't want to load from a url, and tries to
-     * load from a url if the user specified one
-     * @param url the url to load, could be a command to not load the url
-     * @return whether any url was loaded from or not.
-     * @throws Exception an exception if the url is invalid
-     */
+
     public boolean loadURL(String url) throws Exception {
         Gson gson = new Gson();
-        if (url.equalsIgnoreCase("no")) {
+        if (url.equalsIgnoreCase("local")) {
+            System.out.println("Enter file name to use as: file_name.type");
+            String fileName = scanner.nextLine();
+            world = gson.fromJson(Data.getFileContentsAsString(fileName), World.class);
+            rooms = world.getRooms();
+
+            if (!worldValidityChecker(world)) {
+                System.out.println("====WORLD NOT COMPATIBLE WITH NAVIGATOR====");
+                return false;
+            }
+
+            System.out.println("====WORLD LOADED FROM SPECIFIED FILE====");
+            return true;
+        } else if (url.equalsIgnoreCase("default")) {
             world = gson.fromJson(APARTMENT_JSON, World.class);
             rooms = world.getRooms();
             System.out.println("====WORLD LOADED FROM DEFAULT APARTMENT FILE====");
@@ -401,12 +374,10 @@ public class Navigator {
                 world = gson.fromJson(json, World.class);
                 rooms = world.getRooms();
 
-                /*
-                if (!worldValidityChecker(world, rooms)) {
+                if (!worldValidityChecker(world)) {
                     System.out.println("====WORLD NOT COMPATIBLE WITH NAVIGATOR====");
                     return false;
                 }
-                */
 
                 System.out.println("====WORLD LOADED FROM YOUR URL====");
                 return true;
@@ -415,28 +386,13 @@ public class Navigator {
         }
     }
 
-    /*
-    private boolean worldValidityChecker(World worldToCheck, List<World.Room> roomsToCheck) {
-        if (worldToCheck.getStartingRoom() == null || worldToCheck.getEndingRoom() == null ||
-                roomsToCheck == null) {
+    private boolean worldValidityChecker(World worldToCheck) {
+        if (worldToCheck == null) {
             return false;
+        } else if (worldToCheck.checkNullFields()) {
+            return false;
+        } else {
+            return true;
         }
-
-        for (int i = 0; i < roomsToCheck.size(); i++) {
-            World.Room room = roomsToCheck.get(i);
-            if (room.getDirections() == null || room.getName() == null || room.getDescription() == null) {
-                return false;
-            }
-
-            List<World.Room.Direction> directions = room.getDirections();
-            for (int dI = 0; dI < directions.size(); dI++) {
-                World.Room.Direction dir = directions.get(dI);
-                if (dir.getDirectionName() == null || dir.getRoom() == null) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
-    */
 }

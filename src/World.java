@@ -34,6 +34,21 @@ public class World {
         return rooms;
     }
 
+    public boolean checkNullFields() {
+        if (startingRoom == null || endingRoom == null || player == null || rooms == null) {
+            return true;
+        }
+        if (player.checkNullFields()) {
+            return true;
+        }
+        for (int i = 0; i < rooms.size(); i++) {
+            if (rooms.get(i).checkNullFields()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //===========================================
     public class Player {
         private List<Room.Item> items;
@@ -53,6 +68,18 @@ public class World {
 
         public int getHp() {
             return hp;
+        }
+
+        public boolean checkNullFields() {
+            if (items == null || hp <= 0) {
+                return true;
+            }
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).checkNullFields()) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
     //===========================================
@@ -87,12 +114,36 @@ public class World {
             return directions;
         }
 
+        public boolean checkNullFields() {
+            if (name == null || description == null || monster == null || items == null || directions == null) {
+                return true;
+            }
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).checkNullFields()) {
+                    return true;
+                }
+            }
+            for (int i = 0; i < directions.size(); i++) {
+                if (directions.get(i).checkNullFields()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         //=======================================
         public class Item {
             private String name;
 
             public String getName() {
                 return name;
+            }
+
+            public boolean checkNullFields() {
+                if (name == null) {
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -121,6 +172,13 @@ public class World {
 
             public List<String> getValidKeyNames() {
                 return validKeyNames;
+            }
+
+            public boolean checkNullFields() {
+                if (directionName == null || room ==  null || validKeyNames == null) {
+                    return true;
+                }
+                return false;
             }
         }
     }
