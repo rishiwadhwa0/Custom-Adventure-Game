@@ -58,7 +58,7 @@ public class Navigator {
         } else {
             //TESTER MODE
             try {
-                loadURL(APARTMENT_JSON  );
+                loadURL("default");
             } catch (Exception e) {
                 System.out.println("====INVALID URL====");
             }
@@ -160,7 +160,7 @@ public class Navigator {
         }
     }
 
-    private String findCommandType(String command) {
+    public String findCommandType(String command) {
         String [] commandWords = command.split(" ");
         if (commandWords[0].equalsIgnoreCase("go")) {
             return "go";
@@ -174,7 +174,7 @@ public class Navigator {
         }
     }
 
-    private boolean handlePickupCommand(String command) {
+    public boolean handlePickupCommand(String command) {
         String [] commandWords = command.split(" ");
         String itemToPickUp = commandWords[1];
         List<World.Room.Item> roomItems = currentRoom.getItems();
@@ -192,7 +192,7 @@ public class Navigator {
         return true;
     }
 
-    private boolean handleUsewithCommand(String command) {
+    public boolean handleUsewithCommand(String command) {
         String [] commandWords = command.split(" ");
         String itemNameToCheck = commandWords[1];
         List<World.Room.Item> playerItems = world.getPlayer().getItems();
@@ -329,6 +329,9 @@ public class Navigator {
         return rooms;
     }
 
+    public World getWorld() {
+        return world;
+    }
 
     public void setUpWorld() {
         while (true) {
@@ -386,7 +389,7 @@ public class Navigator {
         }
     }
 
-    private boolean worldValidityChecker(World worldToCheck) {
+    private static boolean worldValidityChecker(World worldToCheck) {
         if (worldToCheck == null) {
             return false;
         } else if (worldToCheck.checkNullFields()) {

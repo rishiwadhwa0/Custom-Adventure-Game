@@ -2,7 +2,7 @@
 - [x] Rename commandChecker to formatCommand and change the calls to the function
 - [x] fix any other naming issues you see
 - [X] Check for invalid JSON by placing functions in other classes (i.e. assigning responsibilities to my objects)
-- [] make tests more organized this time
+- [X] make tests more organized this time
 
 #### Plan to accomplish changes for Adventure 2:
 - [x] Edit World class to represent new JSON schema
@@ -16,4 +16,6 @@
 commands, so I re-did the entire command checking sequence. Overall, it led to a nicer, modular implementation.
 2. Scanner.nextInt() consumes the integer, but not the "/n", so the next time you do Scanner.nextLine() it will take in
 that "/n". To get circumvent this, just take in the next like ride after you take in the int to consume the "\n"
+3. Apparently Windows tags on a "/r" separator along with "/n" when printing to the console. This was good to know
+since I test output from the console.
 

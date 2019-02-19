@@ -4,9 +4,12 @@ import com.mashape.unirest.http.Unirest;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.xml.catalog.Catalog;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 public class ParsingApartmentJSONTest {
     private static final String APARTMENT_JSON = Data.getFileContentsAsString("apartment.json");
@@ -37,5 +40,26 @@ public class ParsingApartmentJSONTest {
     public void checkLivingRoomDirectionKeyNames() {
         World.Room livingRoom = aRooms.get(1);
         assertEquals(0, livingRoom.getDirections().get(1).getValidKeyNames().size());
+    }
+
+    @Test
+    public void checkIfMonster() {
+        World.Room livingRoom = aRooms.get(2);
+        assertEquals("true", livingRoom.getMonster());
+    }
+
+    @Test
+    public void checkIfNoMonster() {
+        assertEquals("false", aRooms.get(0).getMonster());
+    }
+
+    @Test
+    public void checkIncompatibleWorld() {
+        Navigator tGps = new Navigator(true);
+        try {
+            tGps.loadURL("https://courses.engr.illinois.edu/cs126/adventure/siebel.json");
+        } catch (Exception e) {
+            fail();
+        }
     }
 }
